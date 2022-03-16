@@ -1,4 +1,4 @@
 # PHP REST API
-### PHP REST API with token authentication for To Do List Application and image upload against a task
+### PHP REST API with token authentication and image upload for To-Do List application
 
 No frameworks.
