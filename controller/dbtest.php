@@ -10,7 +10,6 @@ try {
 //
 // catch
 catch (PDOException $e) {
-    echo "Database connection error: ", $e->getMessage();
     $response = new Response();
     // http code 500: is a server error. if we can not connect to a database it is a server error
     $response->setHttpStatusCode(500);
