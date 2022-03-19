@@ -6,6 +6,23 @@ require_once '../model/Response.php';
 try {
     $writeDB = DB::connectWriteDB();
     $readDB = DB::connectReadDB();
+
+
+    //
+    //
+    //
+    //
+    //
+    $response = new Response();
+    // http code 500: is a server error. if we can not connect to a database it is a server error
+    $response->setHttpStatusCode(200);
+    $response->setSuccess(true);
+    $response->addMessage('Successfully connected to Database');
+
+    // return the response using the send method
+    $response->send();
+    // exit the scrip
+    exit;
 }
 //
 // catch
