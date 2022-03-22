@@ -1,0 +1,8 @@
+#php_flag display_errors on
+
+RewriteEngine On    # Turn on the rewriting engine
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Tasks
+RewriteRule ^tasks/([0-9]+)$ controller/task.php?taskid=$1 [L]    # Handle task id
