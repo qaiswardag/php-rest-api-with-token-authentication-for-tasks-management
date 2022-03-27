@@ -28,7 +28,7 @@ try {
 // check if task with id exist
 // we are looking for the task id in the GET super global
 
-// check if taskid is in the url e.g. /tasks/1
+// check if task id is in the url e.g. /tasks/1
 if (array_key_exists("taskid", $_GET)) {
     // get task id from query string
     $taskid = $_GET['taskid'];
@@ -44,8 +44,35 @@ if (array_key_exists("taskid", $_GET)) {
     }
 
 
-// we need to check what the what the request method is
+    // CORS
+    // CORS
+    // CORS
+    // CORS
+    // CORS
+    // handle options request method for CORS
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        header('Access-Control-Allow-Methods: GET, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type');
+        header('Access-Control-Max-Age: 86400');
 
+
+        $response = new Response();
+        $response->setHttpStatusCode(200);
+        $response->setSuccess(true);
+        $response->toCache(true);
+        $response->addMessage("Task IDøøøøøø cannot be blank or must be numeric");
+        $response->setData($returnData);
+        $response->send();
+        exit();
+    }
+    // CORS
+    // CORS
+    // CORS
+    // CORS
+    // CORS
+
+
+    // we need to check what the what the request method is
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
         try {
