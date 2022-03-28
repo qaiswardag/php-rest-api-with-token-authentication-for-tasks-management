@@ -1,20 +1,7 @@
 <?php
 
-
 class Response
 {
-
-    // qw: START TEST
-    // qw: START TEST
-    // qw: START TEST
-    // qw: START TEST
-
-    // qw: END TEST
-    // qw: END TEST
-    // qw: END TEST
-    // qw: END TEST
-
-
     private $_success;
     private $_httpStatusCode;
     private $_messages = array();
@@ -24,8 +11,6 @@ class Response
     private $_toCache = false;
     private $_responseData = array();
 
-
-    //
     //
     // setters
     // functions to set private variables
@@ -59,12 +44,12 @@ class Response
     // build Response Data - witch will return $_responseData as a response in JSON format back to client
     public function send()
     {
-        // we need to tell the client when this response comes back, what type of data it is.
+        // tell the client when this response comes back, what type of data it is.
         // header function is used for that
-        // we also need say what type of character it is - as good practice
+        // tell client what type of character it is - as good practice
         header('Content-Type: application/json;charset=utf-8');
 
-        // we need to say whether the client can cache the response or not
+        // tell whether the client can cache the response or not
         if ($this->_toCache == true) {
             // saves a lot of load on the server
             header('Cache-control: max-age=60');
