@@ -9,5 +9,8 @@ RewriteCond %{REQUEST_FILENAME} !-f
 
 # Tasks
 RewriteRule ^tasks/([0-9]+)$ controller/task.php?taskid=$1 [L]    # Handle task id
+# completed and incompleted tasks
+RewriteRule ^tasks/complete$ controller/task.php?completed=Y [L]
+RewriteRule ^tasks/incomplete$ controller/task.php?completed=N [L]
 
 
