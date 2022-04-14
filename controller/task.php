@@ -153,7 +153,7 @@ if (array_key_exists("taskid", $_GET)) {
     if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
 
     } else {
-        // create an error if ewquest method is not GET, DELETE or PATCH: 405
+        // create an error if request method is not GET, DELETE or PATCH
         // http error code: 405: means request method not allowed
         $response = new Response();
         $response->setHttpStatusCode(405);
@@ -251,6 +251,14 @@ if (array_key_exists('completed', $_GET)) {
         exit();
     }
 
+}
+
+if (true) {
+    $response = new Response();
+    $response->setHttpStatusCode(200);
+    $response->setSuccess(true);
+    $response->addMessage('ok, so came here!!!!!');
+    $response->setData('first array item', 'nummer 2', 'assd => sdf');
 }
 
 
