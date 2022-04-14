@@ -13,4 +13,11 @@ RewriteRule ^tasks/([0-9]+)$ controller/task.php?taskid=$1 [L]    # Handle task 
 RewriteRule ^tasks/complete$ controller/task.php?completed=Y [L]
 RewriteRule ^tasks/incomplete$ controller/task.php?completed=N [L]
 
+# Pagination
+# map: ^tasks/page/([0-9]+) to controller/task.php?page
+RewriteRule ^tasks/page/([0-9]+)$ controller/task.php?page=$1 [L]
+
+# tasks
+# map: ^tasks to tasks.php
+RewriteRule ^tasks$ controller/task.php [L]
 

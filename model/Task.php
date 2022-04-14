@@ -85,16 +85,17 @@ class Task
     // function to set the private task description
     public function setDescription($description)
     {
-//        if ($description !== null) {
-        // if passed in description is not null and is either 0 chars or is greater than 16777215 characters (mysql mediumtext size), can be null but not empty
-        if (($description !== null) && (strlen($description) == 0 || strlen($description) > 16777215)) {
-            throw new TaskException("Task description error");
+
+        if ($description !== null) {
+            if ((strlen($description) == 0 || strlen($description) > 16777215)) {
+                throw new TaskException("Task description error");
+            }
+            $this->_description = $description;
         }
-        $this->_description = $description;
-//        }
     }
 
 
+    // public function to set the private task deadline date and time
     public function setDeadline($deadline)
     {
         if ($deadline !== null) {
@@ -104,6 +105,16 @@ class Task
             $this->_deadline = $deadline;
         }
     }
+
+
+//    public function setDeadline($deadline) {
+//        if($deadline !== null) {
+//            if(!date_create_from_format('d/m/Y H:i', $deadline) || date_format(date_create_from_format('d/m/Y H:i', $deadline), 'd/m/Y H:i') != $deadline) {
+//                throw new TaskException("Task deadline date and time error");
+//            }
+//            $this->_deadline = $deadline;
+//        }
+//    }
 
 
     // function to set the private task completed
