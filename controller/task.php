@@ -149,6 +149,16 @@ if (array_key_exists("taskid", $_GET)) {
 
 
     }
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        header('Access-Control-Allow-Methods: DELETE, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type');
+        $response = new Response();
+        $response->setHttpStatusCode(200);
+        $response->setSuccess(true);
+        $response->addMessage('Preflight OPTIONS check');
+        $response->send();
+        exit;
+    }
 
     // Update task
     // e.g. v1/tasks/1
