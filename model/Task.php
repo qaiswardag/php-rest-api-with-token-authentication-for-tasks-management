@@ -106,17 +106,6 @@ class Task
         }
     }
 
-
-//    public function setDeadline($deadline) {
-//        if($deadline !== null) {
-//            if(!date_create_from_format('d/m/Y H:i', $deadline) || date_format(date_create_from_format('d/m/Y H:i', $deadline), 'd/m/Y H:i') != $deadline) {
-//                throw new TaskException("Task deadline date and time error");
-//            }
-//            $this->_deadline = $deadline;
-//        }
-//    }
-
-
     // function to set the private task completed
     public function setCompleted($completed)
     {
