@@ -1,5 +1,4 @@
 <?php
-// file for getting a single task
 
 
 require_once 'db.php';
@@ -148,7 +147,7 @@ if (array_key_exists("taskid", $_GET)) {
         }
 
 
-    }
+    } // handle cors
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
         header('Access-Control-Allow-Methods: DELETE, OPTIONS');
         header('Access-Control-Allow-Headers: Content-Type');
@@ -162,9 +161,7 @@ if (array_key_exists("taskid", $_GET)) {
 
     // Update task
     // e.g. v1/tasks/1
-
     if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
-
         // try
         try {
             // check if data is in JSON format
@@ -405,8 +402,8 @@ if (array_key_exists("taskid", $_GET)) {
             $response->send();
             exit();
         }
-
     }
+    // handle cors
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
         header('Access-Control-Allow-Methods: PATCH, OPTIONS');
         header('Access-Control-Allow-Headers: Content-Type');
@@ -416,21 +413,23 @@ if (array_key_exists("taskid", $_GET)) {
         $response->addMessage('Preflight OPTIONS check');
         $response->send();
         exit;
-
-        // request method not allowed
-    } else {
-        // create an error if request method is not GET, DELETE or PATCH
-        // http error code: 405: means request method not allowed
+    } // else other requests
+    else {
         $response = new Response();
+        // http code 405: request method not allowed
         $response->setHttpStatusCode(405);
         $response->setSuccess(false);
-        $response->addMessage("Request method not allowed");
+        $response->addMessage('Request method not allowedøø');
         $response->send();
         exit();
     }
 }
 
 
+//
+//
+//
+//
 // check if any completed or incompled tasks exist
 // example:
 // v1/tasks/completed
@@ -866,7 +865,6 @@ if (empty($_GET)) {
         $response->send();
         exit;
     }
-
 
     $response = new Response();
     // http code 405: request method not allowed
