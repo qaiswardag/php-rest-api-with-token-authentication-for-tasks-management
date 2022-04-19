@@ -28,6 +28,19 @@ try {
 // we are looking for the task id in the GET super global
 
 // check if task id is exist e.g. /tasks/1
+// handle cors
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header('Access-Control-Allow-Methods: POST, PATCH, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type');
+    $response = new Response();
+    $response->setHttpStatusCode(200);
+    $response->setSuccess(true);
+    $response->addMessage('Preflight OPTIONS check');
+    $response->send();
+    exit;
+}
+
+
 if (array_key_exists("taskid", $_GET)) {
     // get task id from query string
     $taskid = $_GET['taskid'];
@@ -41,7 +54,6 @@ if (array_key_exists("taskid", $_GET)) {
         $response->send();
         exit;
     }
-
     // we need to check what the what the request method is
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
@@ -107,6 +119,7 @@ if (array_key_exists("taskid", $_GET)) {
 
     }
 
+
     if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
         try {
             $query = $writeDB->prepare('delete from tbltasks where id = :taskid');
@@ -147,20 +160,11 @@ if (array_key_exists("taskid", $_GET)) {
         }
 
 
-    } // handle cors
-    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-        header('Access-Control-Allow-Methods: DELETE, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type');
-        $response = new Response();
-        $response->setHttpStatusCode(200);
-        $response->setSuccess(true);
-        $response->addMessage('Preflight OPTIONS check');
-        $response->send();
-        exit;
     }
 
     // Update task
     // e.g. v1/tasks/1
+    // handle cors
     if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
         // try
         try {
@@ -402,19 +406,7 @@ if (array_key_exists("taskid", $_GET)) {
             $response->send();
             exit();
         }
-    }
-    // handle cors
-    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-        header('Access-Control-Allow-Methods: PATCH, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type');
-        $response = new Response();
-        $response->setHttpStatusCode(200);
-        $response->setSuccess(true);
-        $response->addMessage('Preflight OPTIONS check');
-        $response->send();
-        exit;
-    } // else other requests
-    else {
+    } else {
         $response = new Response();
         // http code 405: request method not allowed
         $response->setHttpStatusCode(405);
@@ -706,6 +698,7 @@ if (empty($_GET)) {
 
     // POST a task
     // e.g. v1/tasks
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // try
         try {
@@ -855,17 +848,6 @@ if (empty($_GET)) {
 
 
     }
-    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-        header('Access-Control-Allow-Methods: POST, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type');
-        $response = new Response();
-        $response->setHttpStatusCode(200);
-        $response->setSuccess(true);
-        $response->addMessage('Preflight OPTIONS check');
-        $response->send();
-        exit;
-    }
-
     $response = new Response();
     // http code 405: request method not allowed
     $response->setHttpStatusCode(405);
