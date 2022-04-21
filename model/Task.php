@@ -8,7 +8,6 @@ class TaskException extends Exception
 
 class Task
 {
-    // define private variables
     // define variable to store task id number
     private $_id;
     // define variable to store task title
