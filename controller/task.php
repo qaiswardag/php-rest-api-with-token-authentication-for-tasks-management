@@ -14,6 +14,7 @@ try {
     // 0 means that the error will be stored in the php error log file
     error_log("Connection error: " . $e, 0);
     $response = new Response();
+    // http code 500: server error
     $response->setHttpStatusCode(500);
     $response->setSuccess(false);
     $response->addMessage('Database connection error');
@@ -27,7 +28,7 @@ try {
 // check if task with id exist
 // we are looking for the task id in the GET super global
 
-// check if task id is exist e.g. /tasks/1
+// check if task id exist e.g. /tasks/1
 // handle cors
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Methods: POST, PATCH, DELETE, OPTIONS');
@@ -101,6 +102,7 @@ if (array_key_exists("taskid", $_GET)) {
 
         } catch (TaskException $e) {
             $response = new Response();
+            // http code 500: server error
             $response->setHttpStatusCode(500);
             $response->setSuccess(false);
             $response->addMessage($e->getMessage());
@@ -110,6 +112,7 @@ if (array_key_exists("taskid", $_GET)) {
             // 0 means that the error will be stored in the php error log file
             error_log("Database query error: " . $e, 0);
             $response = new Response();
+            // http code 500: server error
             $response->setHttpStatusCode(500);
             $response->setSuccess(false);
             $response->addMessage('Failed to get Task');
@@ -152,6 +155,7 @@ if (array_key_exists("taskid", $_GET)) {
             // connection issue or query issue
         } catch (PDOException $e) {
             $response = new Response();
+            // http code 500: server error
             $response->setHttpStatusCode(500);
             $response->setSuccess(false);
             $response->addMessage('Failed to delete task');
@@ -422,13 +426,7 @@ if (array_key_exists("taskid", $_GET)) {
 //
 //
 //
-// check if any completed or incompled tasks exist
-// example:
-// v1/tasks/completed
-// v1/tasks/incompleted
-
-// v1/controller/task.php?/completed=Y
-// v1/controller/task.php?/completed=N
+// check if task is completed
 if (array_key_exists('completed', $_GET)) {
 
     // check for completed
@@ -491,6 +489,7 @@ if (array_key_exists('completed', $_GET)) {
         } catch (PDOException) {
             error_log("Database query error – " . $e, 0);
             $response = new Response();
+            // http code 500: server error
             $response->setHttpStatusCode(500);
             $response->setSuccess(false);
             $response->addMessage('Failed to get tasks');
@@ -514,8 +513,6 @@ if (array_key_exists('completed', $_GET)) {
 if (array_key_exists("page", $_GET)) {
 
 // get all tasks with pagination
-// url: task.php?page=3
-// pretty url: tasks/page/3
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
         // page
@@ -547,7 +544,7 @@ if (array_key_exists("page", $_GET)) {
             $tasksCount = intval($row['totalNoOfTasks']);
 
             // number of pages
-            // divide amount of rows with how many row we want to show on each page
+            // divide amount of rows with how many rows we want to show on each page
             $numOfPages = ceil($tasksCount / $limitPerPage);
 
             // if we have 0 tasks, we are not able to devide with 0
@@ -556,7 +553,7 @@ if (array_key_exists("page", $_GET)) {
                 $numOfPages = 1;
             }
 
-            // if there is only 2 pages, we have to send response saying page not found
+            // send response saying page not found
             if ($page > $numOfPages) {
                 $response = new Response();
                 // 404 http code, since page do not exist
@@ -593,7 +590,6 @@ if (array_key_exists("page", $_GET)) {
             ($page < $numOfPages ? $returnData['has_next_page'] = true : $returnData['has_next_page'] = false);
             ($page > 1 ? $returnData['has_previous_page'] = true : $returnData['has_previous_page'] = false);
             $returnData['tasks'] = $taskArray;
-
 
             $response = new Response();
             $response->setHttpStatusCode(200);
@@ -685,6 +681,7 @@ if (empty($_GET)) {
         } catch (PDOExeption $e) {
             error_log("Databse query error - " . $e, 0);
             $response = new Response();
+            // http code 500: server error
             $response->setHttpStatusCode(500);
             $response->setSuccess(false);
             $response->addMessage('Failed to get tasks');
@@ -697,13 +694,11 @@ if (empty($_GET)) {
     }
 
     // POST a task
-    // e.g. v1/tasks
-
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // try
         try {
             // request body. data that needs to be handled in JSON format
-            // check that content type is request header is set to application/json
+            // check request header is set to application/json
             if (isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] !== 'application/json') {
                 $response = new Response();
                 // http code 400: incorrect data provided
@@ -742,7 +737,7 @@ if (empty($_GET)) {
             }
 
             // validate
-            // create new task with data, if non mandatory fields not provided then set to null
+            // create new task with data, if non mandatory fields provided then set to null
             $newTask = new Task(null, $jsonData->title, (isset($jsonData->description) ? $jsonData->description : null), (isset($jsonData->deadline) ? $jsonData->deadline : null), $jsonData->completed);
             // get title, description, deadline, completed and store them in variables
             $title = $newTask->getTitle();
@@ -766,10 +761,11 @@ if (empty($_GET)) {
             // get row count
             $rowCount = $query->rowCount();
 
-            // check if row was actually inserted, PDO exception should have caught it if not.
+            // check if row was actually inserted, PDO exception should have caught it if not
             if ($rowCount === 0) {
                 // set up response for unsuccessful return
                 $response = new Response();
+                // http code 500: server error
                 $response->setHttpStatusCode(500);
                 $response->setSuccess(false);
                 $response->addMessage("Failed to create task");
@@ -778,7 +774,7 @@ if (empty($_GET)) {
             }
 
 
-            // a part of REST api, always return same data back after successful creation
+            // as part of REST api, always return same data back after successful creation
             // last insert id method. PDO method applies for current session
             // get last task id so we can return the Task in the json
             $lastTaskID = $writeDB->lastInsertId();
@@ -788,7 +784,7 @@ if (empty($_GET)) {
 
             if ($rowCount === 0) {
                 $response = new Response();
-                // status code 500
+                // http code 500: server error
                 $response->setHttpStatusCode(500);
                 $response->setSuccess(false);
                 $response->addMessage('Failed to get task after creation');
@@ -816,7 +812,7 @@ if (empty($_GET)) {
 
 
             $response = new Response();
-            // status code 201: cause something have been created
+            // status code 201: something have been created
             $response->setHttpStatusCode(201);
             $response->setSuccess(true);
             $response->addMessage('New task created');
@@ -838,7 +834,7 @@ if (empty($_GET)) {
         } catch (PDOException $e) {
             error_log("Database query error - " . $e, 0);
             $response = new Response();
-            // status code 500
+            // http code 500: server error
             $response->setHttpStatusCode(500);
             $response->setSuccess(false);
             $response->addMessage('Failed to insert task into database. Check submitted data for errors');
@@ -856,8 +852,7 @@ if (empty($_GET)) {
     $response->send();
     exit();
 }
-// if GET global variable is not empty
-// e.g. v1/controller/task.php?test
+// if GET global variable is not empty and endpoint not defined. /test
 if (!empty($_GET)) {
     $response = new Response();
     $response->setHttpStatusCode(404);
