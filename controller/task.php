@@ -1,10 +1,9 @@
 <?php
-
 require_once 'db.php';
 require_once '../model/Task.php';
 require_once '../model/Response.php';
 
-// 1: connect to the database
+// connect to the database
 try {
     $writeDB = DB::connectWriteDB();
     $readDB = DB::connectReadDB();
@@ -21,13 +20,9 @@ try {
     exit();
 }
 
-
 // in order to get a single task, we need to pass in a single task ID into the url
-
 // check if task with id exist
 // we are looking for the task id in the GET super global
-
-// check if task id exist e.g. /tasks/1
 // handle cors
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Methods: POST, PATCH, DELETE, OPTIONS');
@@ -40,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-
+// check if task id exist e.g. /tasks/1
 if (array_key_exists("taskid", $_GET)) {
     // get task id from query string
     $taskid = $_GET['taskid'];
@@ -419,11 +414,6 @@ if (array_key_exists("taskid", $_GET)) {
         exit();
     }
 }
-
-
-//
-//
-//
 //
 // check if task is completed
 if (array_key_exists('completed', $_GET)) {
