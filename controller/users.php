@@ -1,7 +1,7 @@
 <?php
 
-require_once('db.php');
-require_once('../model/response.php');
+require_once 'db.php';
+require_once '../model/response.php';
 
 // note: never cache user http requests/responses
 // (our response model defaults to no cache unless specifically set)

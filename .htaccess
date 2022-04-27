@@ -3,6 +3,10 @@ Header Set Access-Control-Allow-Origin "*"
 
 php_flag display_errors on
 
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+
+
+
 RewriteEngine On    # Turn on the rewriting engine
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
@@ -29,3 +33,7 @@ RewriteRule ^users$ controller/users.php [L]
 # sessions
 # map: ^sessions points to controller/sessions.php
 RewriteRule ^sessions$ controller/sessions.php [L]
+
+# sessions
+# map: ^sessions/3 points to controller/sessions.php?sessionid=3
+RewriteRule ^sessions/([0-9]+)$ controller/sessions.php?sessionid=$1 [L]
