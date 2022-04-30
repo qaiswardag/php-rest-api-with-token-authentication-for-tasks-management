@@ -154,7 +154,7 @@ if (array_key_exists("sessionid", $_GET)) {
 
             // get user record for provided session id, access AND refresh token
             // create db query to retrieve user details from provided access and refresh token
-            $query = $writeDB->prepare('SELECT tblsessions.id as sessionid, tblsessions.userid as userid, accesstoken, refreshtoken, useractive, loginattempts, accesstokenexpiry, refreshtokenexpiry from tblsessions, tblusers where tblusers.id = tblsessions.userid and tblsessions.id = :sessionid and tblsessions.accesstoken = :accesstoken and tblsessions.refreshtoken = :refreshtoken');
+            $query = $writeDB->prepare('SELECT tblsessions.id as sessionid, tblsessions.userid as userid, accesstoken, refreshtoken, username, fullname, useractive, loginattempts, accesstokenexpiry, refreshtokenexpiry from tblsessions, tblusers where tblusers.id = tblsessions.userid and tblsessions.id = :sessionid and tblsessions.accesstoken = :accesstoken and tblsessions.refreshtoken = :refreshtoken');
             $query->bindParam(':sessionid', $sessionid, PDO::PARAM_INT);
             $query->bindParam(':accesstoken', $accesstoken, PDO::PARAM_STR);
             $query->bindParam(':refreshtoken', $refreshtoken, PDO::PARAM_STR);
@@ -177,6 +177,9 @@ if (array_key_exists("sessionid", $_GET)) {
             $row = $query->fetch(PDO::FETCH_ASSOC);
 
             // save returned details into variables
+            $returned_fullname = $row['fullname'];
+            $returned_username = $row['username'];
+
             $returned_sessionid = $row['sessionid'];
             $returned_userid = $row['userid'];
             $returned_accesstoken = $row['accesstoken'];
@@ -260,11 +263,25 @@ if (array_key_exists("sessionid", $_GET)) {
                 exit;
             }
 
+
+//            $returnData = array();
+//
+//            $returnData['session_id'] = intval($lastSessionID);
+//            $returnData['access_token'] = $accesstoken;
+//            $returnData['access_token_expires_in'] = $access_token_expiry_seconds;
+//            $returnData['refresh_token'] = $refreshtoken;
+//            $returnData['refresh_token_expires_in'] = $refresh_token_expiry_seconds;
+
+
             $returnData = array();
+            $returnData['user_id'] = $returned_userid;
+            $returnData['username'] = $returned_username;
+            $returnData['fullname'] = $returned_fullname;
+
             $returnData['session_id'] = $returned_sessionid;
             $returnData['access_token'] = $accesstoken;
             $returnData['access_token_expiry'] = $access_token_expiry_seconds;
-            $returnData['refresh_roken'] = $refreshtoken;
+            $returnData['refresh_token'] = $refreshtoken;
             $returnData['refresh_token_expiry'] = $refresh_token_expiry_seconds;
 
             $response = new Response();
