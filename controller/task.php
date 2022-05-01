@@ -692,6 +692,7 @@ if (array_key_exists("page", $_GET)) {
             $response->setHttpStatusCode(500);
             $response->setSuccess(false);
             $response->addMessage('Failed to get tasks');
+            $response->addMessage('something went wrong');
             $response->send();
             exit();
         }

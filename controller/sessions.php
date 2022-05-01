@@ -226,7 +226,9 @@ if (array_key_exists("sessionid", $_GET)) {
             $accesstoken = base64_encode(bin2hex(openssl_random_pseudo_bytes(24)) . time());
             $refreshtoken = base64_encode(bin2hex(openssl_random_pseudo_bytes(24)) . time());
 
+            // expiry access token: 1200
             $access_token_expiry_seconds = 1200;
+            // expiry refresh token: 1209600
             $refresh_token_expiry_seconds = 1209600;
 
             // only update the current session not create new session
@@ -476,9 +478,9 @@ if (empty($_GET)) {
         // refresh token
         $refreshtoken = base64_encode(bin2hex(openssl_random_pseudo_bytes(24)) . time());
 
-        // access token expiry - 20 min
+        // expiry access token: 1200
         $access_token_expiry_seconds = 1200;
-        // refresh token expiry - 14 days
+        // expiry refresh token: 1209600
         $refresh_token_expiry_seconds = 1209600;
 
     } catch (PDOException $e) {
